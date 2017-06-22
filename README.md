@@ -43,8 +43,8 @@ DzhyunTokenManager.prototype.generateToken(duration) 生成新的token, 返回Pr
 
 ### webpack插件使用
 
-    import DzhyunTokenManagerPlugin from 'dzhyun-token/plugin'
-    
+    const DzhyunTokenManagerPlugin = require('dzhyun-token/plugin');
+
     plugins: [
         ...
         new DzhyunTokenManagerPlugin({ useFake: true, keyword: 'abcdef' })
