@@ -130,7 +130,11 @@ class DzhyunTokenManagerPlugin {
                   appInfo.index = masks.length;
                 }
                 masks.push(mask);
-                ParserHelpers.toConstantDependency(JSON.stringify(appInfo)).bind(parser)(expression);
+                if (ParserHelpers.toConstantDependency.length > 1) {
+                  ParserHelpers.toConstantDependency(parser, JSON.stringify(appInfo))(expression);
+                } else {
+                  ParserHelpers.toConstantDependency(JSON.stringify(appInfo)).bind(parser)(expression);
+                }
                 expression.handled = true;
               }
             }
