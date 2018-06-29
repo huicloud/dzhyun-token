@@ -111,10 +111,12 @@ class DzhyunTokenManagerPlugin {
             if (expression.properties && !expression.handled) {
               const properties = {};
               expression.properties.forEach((prop) => {
-                if (prop.value.type === 'Literal') {
-                  properties[prop.key.name] = prop.value.value;
-                } else if (prop.value.type.indexOf('Expression') >= 0) {
-                  parser.evaluateExpression(prop.value);
+                if (prop && prop.value) {
+                  if (prop.value.type === 'Literal') {
+                    properties[prop.key.name] = prop.value.value;
+                  } else if (prop.value.type.indexOf('Expression') >= 0) {
+                    parser.evaluateExpression(prop.value);
+                  }
                 }
               });
               if (properties.appid && properties.secret_key && properties.shortid) {
