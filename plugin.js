@@ -144,16 +144,15 @@ class DzhyunTokenManagerPlugin {
           };
         })(parser.walkObjectExpression);
 
-        parser.plugin('program', () => {
-          if (masks.length > 0 && /(?:DzhyunTokenManager\.js|dzhyun-token\.js)/.test(parser.state.current.request)) {
-            ParserHelpers.addParsedVariableToModule(parser, 'masks', JSON.stringify(masks));
-          }
-        });
+        // parser.plugin('program', () => {
+        //   if (masks.length > 0 && /(?:DzhyunTokenManager\.js|dzhyun-token\.js)/.test(parser.state.current.request)) {
+        //     ParserHelpers.addParsedVariableToModule(parser, 'masks', JSON.stringify(masks));
+        //   }
+        // });
       });
 
       data.normalModuleFactory.plugin('after-resolve', (result, callback) => {
-        // 判断是否需要修改依赖模块
-        if (masks.length > 0 && /(?:DzhyunTokenManager\.js|dzhyun-token\.js)/.test(result.resource)) {
+        if (/(?:DzhyunTokenManager\.js|dzhyun-token\.js)/.test(result.resource)) {
           const tempFile = path.resolve(__dirname, '.tmp.js');
 
           // 生成临时文件
@@ -168,6 +167,14 @@ class DzhyunTokenManagerPlugin {
           // compiler.plugin('done', () => fs.existsSync(tempFile) && fs.unlinkSync(tempFile));
         }
         callback(null, result);
+      });
+
+      compilation.plugin('optimize-modules', (modules) => {
+        modules.forEach((module) => {
+          if (/(?:DzhyunTokenManager\.js|dzhyun-token\.js)/.test(module.request)) {
+            module.addVariable('masks', JSON.stringify(masks), []);
+          }
+        })
       });
     });
   }
