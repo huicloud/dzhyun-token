@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+module.exports = [{
   entry: {
     'dzhyun-token': './src/DzhyunTokenManager.js',
     'dzhyun-token.min': './src/DzhyunTokenManager.js'
@@ -34,4 +34,30 @@ module.exports = {
     }),
   ],
   devtool: 'source-map'
-};
+}, {
+  entry: {
+    'dzhyun-token-mask': './src/DzhyunTokenManagerMask.js',
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
+    library: 'DzhyunTokenManager',
+    libraryTarget: 'commonjs2',
+  },
+  externals: {
+    "dzhyun-connection": {
+      commonjs: 'dzhyun-connection',
+      commonjs2: 'dzhyun-connection',
+      amd: 'dzhyun-connection',
+      root: 'connection',
+    },
+  },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: "babel-loader",
+    }]
+  },
+  devtool: 'source-map'
+}];
